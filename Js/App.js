@@ -31,13 +31,13 @@ document.getElementById("B12").addEventListener('click', function() {
 const canvas = document.getElementById('Flor');
 const ctx = canvas.getContext('2d');
 
-function DibujarPetalo(x, y, radioX, radioY, rotacion, color) {
+function DibujarPetalo(x, y, radioX, radioY, rotacion) {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rotacion);
     ctx.beginPath();
     ctx.ellipse(0, 0, radioX, radioY, 0, 0, Math.PI * 2);
-    ctx.fillStyle = color;
+    ctx.fillStyle = 'yellow'; // Color amarillo para los pétalos
     ctx.fill();
     ctx.restore();
 }
@@ -63,9 +63,7 @@ function DibujarFlor(x, y, numPetalos, radioXPetalo, radioYPetalo, altoTrazo) {
             const anguloIncrement = (Math.PI * 2) / numPetalos;
             for (let i = 0; i < numPetalos; i++) {
                 const angulo = i * anguloIncrement;
-                const radioRandom = Math.random() * 5 + 25; // Variación en el tamaño
-                const colorRandom = `hsl(${Math.random() * 360}, 100%, 50%)`; // Color aleatorio
-                DibujarPetalo(x, y + 100, radioRandom, radioRandom * 0.6, angulo, colorRandom);
+                DibujarPetalo(x, y + 100, radioXPetalo, radioYPetalo, angulo);
             }
 
             // Dibuja el centro de la flor
@@ -80,18 +78,18 @@ function DibujarFlor(x, y, numPetalos, radioXPetalo, radioYPetalo, altoTrazo) {
 
 function CrearVarias() {
     const numFlores = 12;
+    const floresPorFila = 4; // Número de flores por fila
 
     // Espaciado
-    const espacioX = canvas.width / 4;
-    const espacioY = canvas.height / 3;
+    const espacioX = canvas.width / floresPorFila;
+    const espacioY = canvas.height / (numFlores / floresPorFila + 1); // Ajusta la altura
 
     for (let i = 0; i < numFlores; i++) {
-        const fila = Math.floor(i / 4);
-        const columna = i % 4;
+        const fila = Math.floor(i / floresPorFila);
+        const columna = i % floresPorFila;
         const x = espacioX * columna + espacioX / 2;
-        const y = espacioY * fila + espacioY / 2;
+        const y = espacioY * (fila + 1); // Asegúrate de que no se salgan
 
         DibujarFlor(x, y, 8, 30, 80, 200);
     }
 }
-
